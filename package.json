@@ -1,0 +1,22 @@
+{
+  "name": "snowwolfjs",
+  "version": "0.0.1",
+  "description": "Hey, That's Pretty Good",
+  "main": "bot.js",
+  "scripts": {
+    "test": "nodejs bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voidedWarranties/SnowWolfJS.git"
+  },
+  "author": "voidedXD",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/voidedWarranties/SnowWolfJS/issues"
+  },
+  "homepage": "https://github.com/voidedWarranties/SnowWolfJS#readme",
+  "dependencies": {
+    "eris": "^0.7.0"
+  }
+}
