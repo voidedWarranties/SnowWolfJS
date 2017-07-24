@@ -17,6 +17,12 @@
   },
   "homepage": "https://github.com/voidedWarranties/SnowWolfJS#readme",
   "dependencies": {
-    "eris": "^0.7.0"
+    "ejs": "^2.5.6",
+    "eris": "^0.7.0",
+    "express": "^4.15.3",
+    "express-session": "^1.15.4",
+    "passport": "^0.3.2",
+    "passport-discord": "^0.1.2",
+    "rethinkdb": "^2.3.3"
   }
 }
