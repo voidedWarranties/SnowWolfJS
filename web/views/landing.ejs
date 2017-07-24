@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SnowWolfJS</title>
+  </head>
+  <body>
+    <% if(authUser) { %>
+      <p><%= authUser.username %></p>
+    <% } else { %>
+      <p>Not logged in</p>
+    <% } %>
+  </body>
+</html>

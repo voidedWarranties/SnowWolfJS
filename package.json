@@ -21,8 +21,9 @@
     "eris": "^0.7.0",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
+    "express-session-rethinkdb": "^0.4.1",
     "passport": "^0.3.2",
     "passport-discord": "^0.1.2",
-    "rethinkdb": "^2.3.3"
+    "rethinkdbdash": "^2.3.29"
   }
 }
