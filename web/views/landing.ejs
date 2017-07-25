@@ -2,12 +2,20 @@
 <html>
   <head>
     <title>SnowWolfJS</title>
+    <script type="text/javascript">
+      var _bftn_options = {
+        theme: "slow",
+        always_show_widget: true
+      }
+    </script>
+    <script src="https://widget.battleforthenet.com/widget.js" async></script>
   </head>
   <body>
     <% if(authUser) { %>
       <p><img src="<%= authUser.avatar %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= authUser.id %>"> <%= authUser.username %></p>
+      <a href="/logout">Logout</a>
     <% } else { %>
-      <p>Not logged in</p>
+      <a href="/login">Login</login>
     <% } %>
   </body>
 </html>
