@@ -1,5 +1,5 @@
 # SnowWolfJS
-> Hey, that's pretty good! voidedXD.xyz\
+> Hey, that's pretty good! voidedXD.xyz
 
 [![Made Using: Eris](https://img.shields.io/badge/Made%20Using-Eris-blue.svg)](https://abal.moe/Eris/)
 
