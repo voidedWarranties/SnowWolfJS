@@ -1,5 +1,7 @@
 ## Contributing to SnowWolf
 Contributions must be made using the Atom text editor (https://atom.io). Default spacing should be used.
+Linux (Ubuntu Budgie is what I use) makes it **much** easier to contribute. Please consider using Linux, or using a VM.
+A Debian based distribution is recommended.
 
 Look at existing files in the repository to see how to add files. Your modules/features should be config-friendly (tweakable).
 
