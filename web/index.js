@@ -75,7 +75,7 @@ const scopes = ["identify", "email", "guilds"];
 passport.use(new DiscordStrategy({
 	clientID: config.client_id,
 	clientSecret: config.client_secret,
-	callbackURL: "http://localhost:1337/login/callback",
+	callbackURL: `${config.hosting_url}login/callback`,
 	scope: scopes
 }, (accessToken, refreshToken, profile, done) => {
 	process.nextTick(() => {
@@ -134,6 +134,6 @@ app.get("/logout", (req, res) => {
 	res.redirect("/");
 });
 
-app.listen(1337, "localhost", () => {
+app.listen(config.server_port, config.server_ip, () => {
 	console.log("Server Running");
 });

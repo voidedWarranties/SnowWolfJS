@@ -2,5 +2,8 @@
   "prefix": ">",
   "client_id": "",
   "client_secret": "",
-  "token": ""
+  "token": "",
+  "hosting_url": "http://localhost:1337/",
+  "server_ip": "localhost",
+  "server_port": 1337
 }
