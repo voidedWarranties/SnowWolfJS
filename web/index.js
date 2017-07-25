@@ -1,9 +1,10 @@
 const express = require("express");
 const session = require("express-session");
+const cookie = require("cookie-parser");
 const ejs = require("ejs");
 
 const R = require("rethinkdbdash");
-const RDBStore = require("express-session-rethinkdb");
+const RDBStore = require("express-session-rethinkdb")(session);
 
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord").Strategy;
@@ -17,7 +18,7 @@ const database = {
 		host: "localhost",
 		port: "28015",
 		db: "snowwolf",
-		buffer: parseInt("10", 10)
+		buffer: 10
 	}
 };
 
@@ -26,15 +27,34 @@ const r = new R({
 		database.reThinkDB
 	]
 });
-const RDBStoreSession = new RDBStore(session);
 
-const store = new RDBStoreSession(r, {
-	browserSessionsMaxAge: 60000,
+require("rethinkdb-init")(r);
+r.init(database.reThinkDB, ["session"]);
+
+const store = new RDBStore({
+	connectOptions: {
+		servers: [
+			database.reThinkDB
+		],
+		db: "snowwolf",
+		discovery: false,
+		pool: true,
+		buffer: 50,
+		max: 1000,
+		timeout: 20,
+		timeoutError: 1000
+	},
+	table: "session",
+	sessionTimeout: 86400000,
+	flushInterval: 60000,
+	debug: false
 });
 
 app.engine("ejs", ejs.renderFile);
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "ejs");
+
+app.use(cookie());
 
 function checkAuthenticated(req, res, next) {
 	if(req.isAuthenticated()) { return next; }
@@ -47,7 +67,7 @@ function getAuthUser(user) {
 		username: user.username,
 		id: user.id,
 		avatar: user.avatar ? (`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`) : "https://kyubey.info/images/default_avatar.png"
-	}
+	};
 }
 
 const scopes = ["identify", "email", "guilds"];
@@ -60,7 +80,7 @@ passport.use(new DiscordStrategy({
 }, (accessToken, refreshToken, profile, done) => {
 	process.nextTick(() => {
 		return done(null, profile);
-	})
+	});
 }));
 
 passport.serializeUser((user, done) => {
@@ -75,7 +95,7 @@ app.use(session({
 	secret: "cIGxEWj4PwbnasdurJzS",
 	resave: false,
 	saveUninitialized: false,
-	store,
+	store: store,
 	cookie: {
 		httpOnly: true,
 		sameSite: true,
@@ -88,8 +108,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((error, req, res, next) => {
-	res.sendStatus(500);
-	res.render("error.ejs", {error});
+	res.status(500).send(error);
+	console.error(error);
 });
 
 app.get("/", (req, res) => {
@@ -104,11 +124,16 @@ app.get("/login", passport.authenticate("discord", {
 }));
 
 app.get("/login/callback", passport.authenticate("discord", {
-	failureRedirect: "/"
+	failureRedirect: "/login"
 }), (req, res) => {
 	res.redirect("/");
 });
 
-const server = app.listen(1337, "localhost", () => {
-	process.setMaxListeners(0);
+app.get("/logout", (req, res) => {
+	req.logout();
+	res.redirect("/");
+});
+
+app.listen(1337, "localhost", () => {
+	console.log("Server Running");
 });

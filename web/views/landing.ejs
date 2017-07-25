@@ -5,7 +5,7 @@
   </head>
   <body>
     <% if(authUser) { %>
-      <p><%= authUser.username %></p>
+      <p><img src="<%= authUser.avatar %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= authUser.id %>"> <%= authUser.username %></p>
     <% } else { %>
       <p>Not logged in</p>
     <% } %>
