@@ -12,7 +12,7 @@
   </head>
   <body>
     <% if(authUser) { %>
-      <p><img src="<%= authUser.avatar %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= authUser.id %>"> <%= authUser.username %></p>
+      <p><img src="<%= authUser.avatar %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= authUser.id %>"> <%= authUser.username %>#<%= authUser.discriminator %> (<%= authUser.id %>)</p>
       <a href="/logout">Logout</a>
     <% } else { %>
       <a href="/login">Login</login>

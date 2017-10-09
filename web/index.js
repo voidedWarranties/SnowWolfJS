@@ -65,6 +65,7 @@ function checkAuthenticated(req, res, next) {
 function getAuthUser(user) {
 	return {
 		username: user.username,
+		discriminator: user.discriminator,
 		id: user.id,
 		avatar: user.avatar ? (`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`) : "https://kyubey.info/images/default_avatar.png"
 	};
