@@ -1,6 +1,8 @@
 const eris = require("eris");
 const fs = require("fs");
 
+const webServer = require("./web/index.js");
+
 const config = require("./config.json");
 
 const events = {
@@ -26,6 +28,7 @@ bot.on("ready", () => {
 			command(bot);
 		});
 	});
+	webServer(bot);
 });
 
 bot.connect();

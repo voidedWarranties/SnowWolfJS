@@ -74,68 +74,71 @@ function getAuthUser(user) {
 
 const scopes = ["identify", "email", "guilds"];
 
-passport.use(new DiscordStrategy({
-	clientID: config.client_id,
-	clientSecret: config.client_secret,
-	callbackURL: `${config.hosting_url}login/callback`,
-	scope: scopes
-}, (accessToken, refreshToken, profile, done) => {
-	process.nextTick(() => {
-		return done(null, profile);
+module.exports = (bot) => {
+	passport.use(new DiscordStrategy({
+		clientID: config.client_id,
+		clientSecret: config.client_secret,
+		callbackURL: `${config.hosting_url}login/callback`,
+		scope: scopes
+	}, (accessToken, refreshToken, profile, done) => {
+		process.nextTick(() => {
+			return done(null, profile);
+		});
+	}));
+
+	passport.serializeUser((user, done) => {
+		done(null, user);
 	});
-}));
 
-passport.serializeUser((user, done) => {
-	done(null, user);
-});
-
-passport.deserializeUser((id, done) => {
-	done(null, id);
-});
-
-app.use(session({
-	secret: "cIGxEWj4PwbnasdurJzS",
-	resave: false,
-	saveUninitialized: false,
-	store: store,
-	cookie: {
-		httpOnly: true,
-		sameSite: true,
-		secure: "auto",
-		maxAge: 2592000000
-	}
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use((error, req, res, next) => {
-	res.status(500).send(error);
-	console.error(error);
-});
-
-app.get("/", (req, res) => {
-	const uptime = process.uptime();
-	res.render("landing.ejs", {
-		authUser: req.isAuthenticated() ? getAuthUser(req.user) : null
+	passport.deserializeUser((id, done) => {
+		done(null, id);
 	});
-});
 
-app.get("/login", passport.authenticate("discord", {
-	scope: scopes
-}));
+	app.use(session({
+		secret: "cIGxEWj4PwbnasdurJzS",
+		resave: false,
+		saveUninitialized: false,
+		store: store,
+		cookie: {
+			httpOnly: true,
+			sameSite: true,
+			secure: "auto",
+			maxAge: 2592000000
+		}
+	}));
 
-app.get("/login/callback", passport.authenticate("discord", {
-	failureRedirect: "/login"
-}), (req, res) => {
-	res.redirect("/");
-});
+	app.use(passport.initialize());
+	app.use(passport.session());
 
-app.get("/logout", (req, res) => {
-	req.logout();
-	res.redirect("/");
-});
+	app.use((error, req, res, next) => {
+		res.status(500).send(error);
+		console.error(error);
+	});
 
-app.listen(config.server_port, config.server_ip, () => {
-	console.log("Server Running");
-});
+	app.get("/", (req, res) => {
+		const uptime = process.uptime();
+		res.render("landing.ejs", {
+			authUser: req.isAuthenticated() ? getAuthUser(req.user) : null,
+			bot: bot
+		});
+	});
+
+	app.get("/login", passport.authenticate("discord", {
+		scope: scopes
+	}));
+
+	app.get("/login/callback", passport.authenticate("discord", {
+		failureRedirect: "/login"
+	}), (req, res) => {
+		res.redirect("/");
+	});
+
+	app.get("/logout", (req, res) => {
+		req.logout();
+		res.redirect("/");
+	});
+
+	app.listen(config.server_port, config.server_ip, () => {
+		console.log("Server Running");
+	});
+}
