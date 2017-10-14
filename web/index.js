@@ -3,8 +3,8 @@ const session = require("express-session");
 const cookie = require("cookie-parser");
 const ejs = require("ejs");
 
-const R = require("rethinkdbdash");
-const RDBStore = require("express-session-rethinkdb")(session);
+const mongoose = require("mongoose");
+const mongooseSession = require("connect-mongo")(session);
 
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord").Strategy;
@@ -13,41 +13,17 @@ const config = require("./../config.json")
 
 const app = express();
 
-const database = {
-	reThinkDB: {
-		host: "localhost",
-		port: "28015",
-		db: "snowwolf",
-		buffer: 10
-	}
-};
-
-const r = new R({
-	servers: [
-		database.reThinkDB
-	]
+mongoose.connect("mongodb://localhost/snowwolf", {
+	autoReconnect: true,
+	connectTimeoutMS: 30000,
+	socketTimeoutMS: 30000,
+	keepAlive: 120,
+	poolSize: 100,
+	useMongoClient: true
 });
 
-require("rethinkdb-init")(r);
-r.init(database.reThinkDB, ["session"]);
-
-const store = new RDBStore({
-	connectOptions: {
-		servers: [
-			database.reThinkDB
-		],
-		db: "snowwolf",
-		discovery: false,
-		pool: true,
-		buffer: 50,
-		max: 1000,
-		timeout: 20,
-		timeoutError: 1000
-	},
-	table: "session",
-	sessionTimeout: 86400000,
-	flushInterval: 60000,
-	debug: false
+const store = new mongooseSession({
+	mongooseConnection: mongoose.connection
 });
 
 app.engine("ejs", ejs.renderFile);
@@ -98,7 +74,7 @@ module.exports = (bot) => {
 		secret: "cIGxEWj4PwbnasdurJzS",
 		resave: false,
 		saveUninitialized: false,
-		store: store,
+		store,
 		cookie: {
 			httpOnly: true,
 			sameSite: true,
@@ -128,7 +104,7 @@ module.exports = (bot) => {
 	}));
 
 	app.get("/login/callback", passport.authenticate("discord", {
-		failureRedirect: "/login"
+		failureRedirect: "/error"
 	}), (req, res) => {
 		res.redirect("/");
 	});
@@ -136,6 +112,10 @@ module.exports = (bot) => {
 	app.get("/logout", (req, res) => {
 		req.logout();
 		res.redirect("/");
+	});
+
+	app.get("/error", (req, res) => {
+		res.render("error.ejs");
 	});
 
 	app.listen(config.server_port, config.server_ip, () => {

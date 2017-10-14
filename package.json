@@ -17,15 +17,14 @@
   },
   "homepage": "https://github.com/voidedWarranties/SnowWolfJS#readme",
   "dependencies": {
+    "connect-mongo": "^2.0.0",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
     "eris": "^0.7.0",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
-    "express-session-rethinkdb": "^0.4.1",
+    "mongoose": "^4.12.2",
     "passport": "^0.3.2",
-    "passport-discord": "^0.1.2",
-    "rethinkdb-init": "^0.2.2",
-    "rethinkdbdash": "^2.3.29"
+    "passport-discord": "^0.1.2"
   }
 }
