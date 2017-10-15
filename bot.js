@@ -1,6 +1,7 @@
 const eris = require("eris");
 const fs = require("fs");
 
+const driver = require("./database/driver.js");
 const webServer = require("./web/index.js");
 
 const config = require("./config.json");
@@ -28,6 +29,7 @@ bot.on("ready", () => {
 			command(bot);
 		});
 	});
+	driver.init();
 	webServer(bot);
 });
 

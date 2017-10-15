@@ -1,6 +1,10 @@
 # SnowWolfJS
 > Hey, that's pretty good! voidedXD.xyz
 
+Partial code usage from:
+GilbertGobbels/GAwesomeBot
+macdja38/pvpsite
+
 [![Made Using: Eris](https://img.shields.io/badge/Made%20Using-Eris-blue.svg)](https://abal.moe/Eris/)
 
 ## License

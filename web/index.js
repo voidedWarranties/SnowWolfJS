@@ -6,6 +6,8 @@ const ejs = require("ejs");
 const mongoose = require("mongoose");
 const mongooseSession = require("connect-mongo")(session);
 
+const driver = require("./../database/driver.js")
+
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord").Strategy;
 
@@ -13,17 +15,8 @@ const config = require("./../config.json")
 
 const app = express();
 
-mongoose.connect("mongodb://localhost/snowwolf", {
-	autoReconnect: true,
-	connectTimeoutMS: 30000,
-	socketTimeoutMS: 30000,
-	keepAlive: 120,
-	poolSize: 100,
-	useMongoClient: true
-});
-
 const store = new mongooseSession({
-	mongooseConnection: mongoose.connection
+	mongooseConnection: driver.getConnection()
 });
 
 app.engine("ejs", ejs.renderFile);
