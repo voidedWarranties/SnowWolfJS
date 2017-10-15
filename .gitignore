@@ -1,4 +1,6 @@
 node_modules/*
 config.json
+configg.json
+commands/whodidthis.js
 web/rethinkdb_data/*
 rethinkdb_data/*
