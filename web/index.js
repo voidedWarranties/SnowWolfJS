@@ -25,25 +25,38 @@ app.set("view engine", "ejs");
 
 app.use(cookie());
 
-function checkAuthenticated(req, res, next) {
-	if(req.isAuthenticated()) { return next; }
-	res.redirect("/");
-	return true;
-}
-
-function getAuthUser(user) {
-	return {
-		username: user.username,
-		discriminator: user.discriminator,
-		id: user.id,
-		avatar: user.avatar ? (`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`) : "https://kyubey.info/images/default_avatar.png",
-		guilds: user.guilds
-	};
-}
-
 const scopes = ["identify", "email", "guilds"];
 
 module.exports = (bot) => {
+
+	function checkAuthenticated(req, res, next) {
+		if(req.isAuthenticated()) { return next; }
+		res.redirect("/");
+		return true;
+	}
+
+	function getAuthUser(user) {
+		return {
+			username: user.username,
+			discriminator: user.discriminator,
+			id: user.id,
+			avatar: user.avatar ? (`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`) : "https://kyubey.info/images/default_avatar.png",
+			guilds: user.guilds
+		};
+	}
+
+	function getGuildInfo(guild) {
+		return {
+			name: guild.name,
+			id: guild.id,
+			icon: guild.icon ? (`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.jpg`) : "https://kyubey.info/images/default_avatar.png"
+		};
+	}
+
+	function botInGuild(guild) {
+		return bot.guilds.get(guild.id) != null;
+	}
+
 	passport.use(new DiscordStrategy({
 		clientID: config.client_id,
 		clientSecret: config.client_secret,
@@ -88,7 +101,9 @@ module.exports = (bot) => {
 		const uptime = process.uptime();
 		res.render("landing.ejs", {
 			authUser: req.isAuthenticated() ? getAuthUser(req.user) : null,
-			bot: bot
+			bot: bot,
+			getGuildInfo,
+			botInGuild
 		});
 	});
 

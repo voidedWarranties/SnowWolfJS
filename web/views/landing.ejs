@@ -5,13 +5,14 @@
   </head>
   <body>
     <p>Bot logged in as <%= bot.user.username %>#<%= bot.user.discriminator %> (<%= bot.user.id %>)</p>
+    <p>Serving <%= bot.guilds.size %> guilds and <%= bot.users.size %> users!</p>
+    <a href="https://discordapp.com/oauth2/authorize?client_id=<%= bot.user.id %>&scope=bot&permissions=2146958591">Add me!</a>
     <% if(authUser) { %>
       <p><img src="<%= authUser.avatar %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= authUser.id %>"> <%= authUser.username %>#<%= authUser.discriminator %> (<%= authUser.id %>)</p>
       <a href="/logout">Logout</a>
       <hr>
       <% for(i = 0; i < authUser.guilds.length; i++) { %>
-        <%= authUser.guilds[i].name %>
-        <br>
+        <p><img src="<%= getGuildInfo(authUser.guilds[i]).icon %>" style="border-radius: 100%; width: 32px; height: 32px; vertical-align: middle;" alt="<%= getGuildInfo(authUser.guilds[i]).id %>"> <%= getGuildInfo(authUser.guilds[i]).name %> <i><%= botInGuild(authUser.guilds[i]) ? "Has Bot" : "No Bot" %></i></p>
       <% } %>
     <% } else { %>
       <a href="/login">Login</login>
